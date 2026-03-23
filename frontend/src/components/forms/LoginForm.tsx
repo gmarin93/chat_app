@@ -32,8 +32,12 @@ export default function LoginForm() {
   });
 
   const onSubmit = async (data: LoginData) => {
-    await login(data);
-    router.push("/home");
+    try {
+      await login(data);
+      router.push("/home");
+    } catch {
+      // error is already set in the store; stay on the page so the user sees it
+    }
   };
 
   return (

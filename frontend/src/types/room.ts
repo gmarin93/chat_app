@@ -12,6 +12,7 @@ export interface Room {
 }
 
 export interface RoomState {
+    startDirectMessage: (targetUserId: string) => Promise<void>;
     getRooms: () => Promise<void>;
     setCurrentRoom: (room: Room | null) => void;
     rooms: Room[];

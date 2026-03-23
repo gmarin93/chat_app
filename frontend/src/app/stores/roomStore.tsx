@@ -67,6 +67,24 @@ export const useRoomStore = create<RoomState>()(
           set({ isLoading: false });
         }
       },
+      startDirectMessage: async (targetUserId: string) => {
+        console.log("startDirectMessage:", targetUserId);
+        
+        set({ isLoading: true });
+        try {
+            const room = await RoomService.startDirectMessage(targetUserId);
+            set((state) => ({
+                currentRoom: room,
+                rooms: state.rooms.find((r) => r.id === room.id)
+                    ? state.rooms
+                    : [...state.rooms, room],
+            }));
+        } catch (error) {
+            set({ error: error as string });
+        } finally {
+            set({ isLoading: false });
+        }
+    },
     }),
     {
       name: "room-storage",

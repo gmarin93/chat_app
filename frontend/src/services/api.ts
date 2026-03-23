@@ -40,9 +40,11 @@ apiClient.interceptors.response.use(
   (error: AxiosError) => {
     // Handle specific error codes
     if (error.response?.status === 401) {
-      // Unauthorized - clear auth and redirect
-      localStorage.removeItem('auth-storage');
-      window.location.href = '/login';
+      const isLoginRequest = error.config?.url?.includes('/token/');
+      if (!isLoginRequest) {
+        localStorage.removeItem('auth-storage');
+        window.location.href = '/login';
+      }
     }
     
     if (error.response?.status === 500) {

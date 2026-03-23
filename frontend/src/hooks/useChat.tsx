@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useSocketStore } from "@/app/stores/socketStore";
 import { useRoomStore } from "@/app/stores/roomStore";
 import { useChatStore } from "@/app/stores/chatStore";
+import router from "next/router";
 
 export const useChat = () => {
   const { socket, isConnected, connect } = useSocketStore();
@@ -12,6 +13,7 @@ export const useChat = () => {
     clearMessages,
     setTypingUser,
     setStopTypingUser,
+    setLeaveUser,
   } = useChatStore();
 
   // Ensure socket is connected
@@ -46,6 +48,14 @@ export const useChat = () => {
         setStopTypingUser();
       },
     );
+
+    socket.on("leave_room", (data: { roomId: string; username: string }) => {
+      if (data.roomId === currentRoom?.id) {
+        setLeaveUser(data.username);
+        clearMessages();
+        router.push("/");
+      }
+    });
 
     return () => {
       socket.emit("leave_room", currentRoom.id);

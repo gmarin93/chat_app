@@ -9,12 +9,12 @@ class AuthService {
      * Login user
      */
     async login(credentials: LoginCredentials): Promise<AuthResponse> {
-        const response = await apiClient.post<AuthResponse>(
+        const response = await apiClient.post(
             ACCOUNTS_ENDPOINTS.LOGIN,
             credentials
         );
-        console.log("response:", response.data);
-        return response.data;
+        const { access, refresh, user } = response.data;
+        return { token: access, refresh, user };
     }
 
     /**

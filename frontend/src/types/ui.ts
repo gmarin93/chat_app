@@ -1,4 +1,4 @@
-import { ButtonHTMLAttributes, FormHTMLAttributes, InputHTMLAttributes } from "react";
+import { ButtonHTMLAttributes, FormHTMLAttributes, InputHTMLAttributes, ReactNode } from "react";
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -67,4 +67,29 @@ export interface MessageTextFieldProps {
 export interface SendButtonProps {
   hasMessage: boolean;
   onClick: () => void;
+}
+
+export interface SidebarHeaderAction {
+  icon: ReactNode;
+  onClick?: () => void;
+  label: string;
+}
+
+export interface SidebarHeaderProps {
+  title: string;
+  avatar: ReactNode;
+  subtitle?: string;
+  extra?: ReactNode;
+  actions?: SidebarHeaderAction[];
+}
+
+export interface SidebarListProps<T> {
+  items: T[];
+  renderItem: (item: T) => ReactNode;
+  keyExtractor: (item: T) => string;
+  header: ReactNode;
+  searchPlaceholder?: string;
+  filterKey: (item: T) => string;
+  emptyMessage?: string;
+  emptySearchMessage?: string;
 }

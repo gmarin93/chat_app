@@ -102,6 +102,28 @@ export const socketHandler = (io: Server, Message: Model<IMessage>) => {
             }
         });
 
+        socket.on('create_direct_message', async (data: { userId: string; username: string }) => {
+            try {
+
+                let rooms = Array.from(socket.rooms.values());
+
+                console.log("rooms:", rooms);
+
+                let directMessageRoom = rooms.find((room: string) => room.startsWith('direct-'));
+
+                // const message = await Message.create({
+                //     roomId: data.userId,
+                //     userId: data.userId,
+                //     username: data.username,
+                //     content: 'Hello, how are you?',
+                //     createdAt: new Date()
+                // });
+            } catch (error) {
+                console.error('Error creating direct message:', error);
+                socket.emit('error', { message: 'Failed to create direct message' });
+            }
+        });
+
         // Disconnect
         socket.on('disconnect', () => {
             console.log(`❌ User disconnected: ${socket.id}`);

@@ -8,10 +8,11 @@ import MessageTextField from "./MessageTextField";
 import SendButton from "./SendButton";
 import { useSocketStore } from "@/app/stores/socketStore";
 import { useChatStore } from "@/app/stores/chatStore";
+import { User } from "@/types/user";
 
 const MessageInput = () => {
   const [message, setMessage] = useState("");
-  const { user } = useAuthStore();
+  const user: User | null = useAuthStore((state) => state.user);
   const { currentRoom } = useRoomStore();
   const { socket } = useSocketStore();
 

@@ -5,7 +5,7 @@ import { useAuthStore } from "@/app/stores/authStore";
 import { useChatStore } from "@/app/stores/chatStore";
 
 function useTypingIndicator() {
-  const { typingUser, setTypingUser, setStopTypingUser } = useChatStore();
+  const { username, setTypingUser, setStopTypingUser } = useChatStore();
   const { socket, isConnected } = useSocketStore();
   const { currentRoom } = useRoomStore();
   const { user } = useAuthStore();
@@ -15,12 +15,12 @@ function useTypingIndicator() {
 
     socket.on("typing", (data: { userId: string; username: string }) => {
       setTypingUser(data.username);
-      console.log("typingUser:", data.username);
+      console.log("username:", data.username);
     });
 
     socket.on("stop_typing", (data: { userId: string; username: string }) => {
       setStopTypingUser();
-      console.log("stop_typing:", data.username);
+      console.log("username:", data.username);
     });
 
     return () => {
@@ -29,7 +29,7 @@ function useTypingIndicator() {
     };
   }, [socket, user, currentRoom, isConnected]);
 
-  return { typingUser, setTypingUser, setStopTypingUser };
+  return { username, setTypingUser, setStopTypingUser };
 }
 
 export default useTypingIndicator;

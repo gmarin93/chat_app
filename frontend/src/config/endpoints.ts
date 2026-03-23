@@ -11,6 +11,7 @@ export const ROOM_ENDPOINTS = {
     ROOM_MEMBERSHIPS: '/rooms/room-memberships/',
     ROOM_DETAIL: '/rooms/rooms/:slug/',
     ROOM_MEMBERSHIP_DETAIL: '/rooms/room-memberships/:pk/',
+    DIRECT: '/rooms/rooms/',
 } as const;
 
 export const CHAT_ENDPOINTS = {

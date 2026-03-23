@@ -45,6 +45,13 @@ class RoomService {
         const response = await apiClient.get(ROOM_ENDPOINTS.ROOM_MEMBERSHIP_DETAIL.replace(':pk', roomId));
         return response.data;
     }
+
+    async startDirectMessage(targetUserId: string): Promise<Room> {
+        const response = await apiClient.post<Room>(ROOM_ENDPOINTS.ROOMS, {
+            target_user_id: targetUserId,
+        });
+        return response.data;
+    }
 }
 
 export default new RoomService();

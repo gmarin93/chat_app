@@ -11,7 +11,7 @@ import MessageList from "./Messagelist";
 const ChatWindow = () => {
     useChat();
     const { currentRoom } = useRoomStore();
-    const { typingUser } = useTypingIndicator();
+    const { username } = useTypingIndicator();
 
     if (!currentRoom) {
         return <ChatEmptyState />;
@@ -19,7 +19,7 @@ const ChatWindow = () => {
 
     return (
         <div className="flex flex-col h-full bg-[#0b141a]">
-            <ChatHeader room={currentRoom} typingUser={typingUser} />
+            <ChatHeader room={currentRoom} username={username} />
 
             <div className="flex-1 overflow-y-auto px-4 py-4 bg-[#0b141a]">
                 <MessageList />

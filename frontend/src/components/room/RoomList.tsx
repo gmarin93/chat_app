@@ -1,45 +1,52 @@
-'use client';
+"use client";
 
-import { useEffect, useState, useMemo } from "react";
 import { useRoomStore } from "@/app/stores/roomStore";
+import { Room } from "@/types/room";
+import SidebarList from "@/components/ui/SidebarList";
+import SidebarListItem from "@/components/ui/SidebarListItem";
 import RoomListHeader from "./RoomListHeader";
-import RoomSearchBar from "../room/RoomSearchBar";
-import RoomListItem from "../room/RoomListItem";
+import { useRoomsQuery } from "@/hooks/queries/useRoomsQuery";
+
+const roomTypeIcon = (type: Room["room_type"]) => {
+  if (type === "direct") return "👤";
+  if (type === "private") return "🔒";
+  return "#";
+};
 
 const RoomList = () => {
-    const { rooms, getRooms, currentRoom, setCurrentRoom } = useRoomStore();
-    const [search, setSearch] = useState("");
 
-    useEffect(() => {
-        getRooms();
-    }, [getRooms]);
+  const { data: rooms = [], isLoading } = useRoomsQuery();
+  const { currentRoom, setCurrentRoom } = useRoomStore();
 
-    const filteredRooms = useMemo(() => rooms.filter((room) =>
-        room.name.toLowerCase().includes(search.toLowerCase())
-    ), [rooms, search]);
-
-    return (
-        <div className="flex flex-col h-full bg-[#111b21]">
-            <RoomListHeader />
-            <RoomSearchBar value={search} onChange={setSearch} />
-
-            <div className="flex-1 overflow-y-auto">
-                {filteredRooms.length === 0 && (
-                    <p className="text-gray-500 text-sm text-center mt-8">
-                        {search ? 'No rooms match your search' : 'No rooms yet'}
-                    </p>
-                )}
-                {filteredRooms.map((room) => (
-                    <RoomListItem
-                        key={room.id}
-                        room={room}
-                        isActive={currentRoom?.id === room.id}
-                        onClick={setCurrentRoom}
-                    />
-                ))}
-            </div>
-        </div>
-    );
+  return (
+    <SidebarList
+      items={rooms}
+      keyExtractor={(room) => room.id}
+      filterKey={(room) => room.name}
+      header={<RoomListHeader />}
+      searchPlaceholder="Search or start new chat"
+      emptyMessage="No rooms yet"
+      emptySearchMessage="No rooms match your search"
+      renderItem={(room) => (
+        <SidebarListItem
+          avatar={roomTypeIcon(room.room_type)}
+          title={room.name}
+          subtitle={
+            room.description ||
+            (room.room_type === "direct"
+              ? "Direct message"
+              : `${room.member_count ?? 0} members`)
+          }
+          meta={new Date(room.created_at).toLocaleDateString([], {
+            month: "short",
+            day: "numeric",
+          })}
+          isActive={currentRoom?.id === room.id}
+          onClick={() => setCurrentRoom(room)}
+        />
+      )}
+    />
+  );
 };
 
 export default RoomList;

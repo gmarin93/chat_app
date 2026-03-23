@@ -39,4 +39,5 @@ export interface User {
       avatar?: string;
     };
     token: string;
+    refresh?: string;
   }
